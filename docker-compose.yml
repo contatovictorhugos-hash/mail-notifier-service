@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: mail-notifier-db
+    environment:
+      POSTGRES_DB: mailnotifierdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mailnotifierdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: mail-notifier-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mailnotifierdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL}
+      BREVO_SENDER_NAME: ${BREVO_SENDER_NAME}
+
+volumes:
+  pgdata:

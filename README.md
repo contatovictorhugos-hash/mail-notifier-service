@@ -1,6 +1,6 @@
 # Mail Notifier Service
 
-A Spring Boot-based microservice that acts as an email notifier gateway. It receives email sending requests via a REST endpoint and dispatches them through the **Brevo (formerly Sendinblue) SMTP API**. Each email dispatch is logged into an in-memory database with its delivery status.
+A Spring Boot-based microservice that acts as an email notifier gateway. It receives email sending requests via a REST endpoint and dispatches them through the **Brevo (formerly Sendinblue) SMTP API**. Each email dispatch is logged into a **PostgreSQL** database with its delivery status.
 
 ---
 
@@ -8,7 +8,9 @@ A Spring Boot-based microservice that acts as an email notifier gateway. It rece
 
 - **REST API Endpoint**: Simple HTTP POST endpoint to request email dispatch.
 - **Brevo Integration**: Uses RestClient to integrate directly with the Brevo SMTP API.
-- **Database Persistence**: Keeps track of all emails sent, pending, or failed inside an H2 in-memory database.
+- **Database Persistence**: Keeps track of all emails sent, pending, or failed inside a PostgreSQL database.
+- **Flyway Migrations**: Automatic schema creation and evolution using Flyway migrations.
+- **Dockerized Environment**: Fully containerized setup for PostgreSQL database and Spring Boot application using Docker Compose.
 - **SSL Validation Bypass for Development**: Configured with a `dev` profile that disables strict SSL certificate validation (avoiding PKIX certificate path issues in restricted local environments).
 - **Custom Global Exception Handling**: Returns clean, consistent error responses (`ApiError`) in case of failure.
 
@@ -18,7 +20,9 @@ A Spring Boot-based microservice that acts as an email notifier gateway. It rece
 
 - **Java**: 21
 - **Framework**: Spring Boot 3.3.0
-- **Database**: H2 Database (In-Memory)
+- **Database**: PostgreSQL 15 (Alpine)
+- **Migrations**: Flyway
+- **Containerization**: Docker & Docker Compose
 - **HTTP Client**: Apache HttpClient 5 (for connection and custom SSL socket factory)
 - **Build Tool**: Maven
 
@@ -28,27 +32,60 @@ A Spring Boot-based microservice that acts as an email notifier gateway. It rece
 
 ### Prerequisites
 
-- Java 21 JDK (e.g. Microsoft OpenJDK or Eclipse Temurin)
-- Maven 3.x
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 - A Brevo Account and API Key
 
 ### Configuration
 
-The application is configured via `src/main/resources/application.yml`. You can customize the Brevo configuration using environment variables:
+The application is configured via environment variables. To run the application, create a `.env` file in the root directory of the project (this file is ignored by Git for security):
 
-| Variable | Description | Default Value |
-|---|---|---|
-| `BREVO_API_KEY` | Your Brevo API Key v3 | *Fallback key provided in application.yml* |
-| `BREVO_SENDER_EMAIL` | Verified sender email address | `contato.victorhugos@gmail.com` |
-| `BREVO_SENDER_NAME` | Name displayed as sender | `Mail Notifier` |
+```env
+# Credenciais do Brevo (Não envie este arquivo para o Git!)
+BREVO_API_KEY=sua_api_key_aqui
+BREVO_SENDER_EMAIL=contato.victorhugos@gmail.com
+BREVO_SENDER_NAME=Mail Notifier
+```
 
 ### Database Configuration
 
-For development convenience, H2 database uses a custom credential set:
-- **JDBC URL**: `jdbc:h2:mem:mailnotifierdb`
-- **Username**: `user`
+The PostgreSQL database is configured via Docker Compose:
+- **JDBC URL (Local fallback)**: `jdbc:postgresql://localhost:5432/mailnotifierdb`
+- **Username**: `postgres`
 - **Password**: `password`
-- **H2 Console Path**: `http://localhost:8080/h2-console`
+- **Port**: `5432`
+
+---
+
+## Running the Application
+
+### Using Docker Compose (Recommended)
+
+1. Ensure Docker Desktop is open and running.
+2. Build and start the services:
+   ```bash
+   docker compose up --build -d
+   ```
+3. Follow the application logs to ensure it started successfully:
+   ```bash
+   docker compose logs -f app
+   ```
+
+To stop the services:
+```bash
+docker compose down
+```
+
+### Checking the Database
+
+To check if the database tables were created successfully inside the PostgreSQL container, run:
+```bash
+docker exec -it mail-notifier-db psql -U postgres -d mailnotifierdb -c "\dt"
+```
+
+To see the rows/emails sent inside the database, run:
+```bash
+docker exec -it mail-notifier-db psql -U postgres -d mailnotifierdb -c "SELECT * FROM tb_emails;"
+```
 
 ---
 
@@ -96,19 +133,3 @@ Send a POST request to deliver an email.
   "timestamp": "2026-06-22T21:22:16.123456"
 }
 ```
-
----
-
-## Running the Application
-
-1. Compile the project:
-   ```bash
-   mvn clean compile
-   ```
-
-2. Run the application:
-   ```bash
-   mvn spring-boot:run
-   ```
-
-The server will start on port `8080`.
