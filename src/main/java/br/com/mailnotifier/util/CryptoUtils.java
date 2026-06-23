@@ -52,6 +52,10 @@ public class CryptoUtils {
 
             return new EncryptionResult(encryptedContentBase64, encryptedAesKeyBase64);
 
+        } catch (IllegalArgumentException e) {
+            throw new EmailEncryptionException("Chave pública inválida: formato Base64 incorreto", e);
+        } catch (java.security.spec.InvalidKeySpecException e) {
+            throw new EmailEncryptionException("Chave pública inválida: estrutura da chave RSA incorreta", e);
         } catch (Exception e) {
             throw new EmailEncryptionException("Erro ao processar criptografia híbrida", e);
         }

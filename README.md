@@ -57,7 +57,6 @@ When a request contains a `publicKey` (RSA PEM format), the service secures the 
 The application is configured via environment variables. To run the application, create a `.env` file in the root directory of the project (this file is ignored by Git for security):
 
 ```env
-# Credenciais do Brevo (Não envie este arquivo para o Git!)
 BREVO_API_KEY=sua_api_key_aqui
 BREVO_SENDER_EMAIL=contato.victorhugos@gmail.com
 BREVO_SENDER_NAME=Mail Notifier
@@ -171,6 +170,30 @@ To send an email with client-side encrypted hybrid payload, you can pass a `publ
   "status": 502,
   "error": "Bad Gateway",
   "message": "Falha ao enviar e-mail para recipient@example.com",
+  "timestamp": "2026-06-22T21:22:16.123456"
+}
+```
+
+#### Error Response (Input Validation failure)
+- **Status**: `400 Bad Request`
+- **Response Body**:
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed: recipient: Recipient email is required",
+  "timestamp": "2026-06-22T21:22:16.123456"
+}
+```
+
+#### Error Response (Invalid Public Key format)
+- **Status**: `400 Bad Request`
+- **Response Body**:
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Chave pública inválida: formato Base64 incorreto",
   "timestamp": "2026-06-22T21:22:16.123456"
 }
 ```
