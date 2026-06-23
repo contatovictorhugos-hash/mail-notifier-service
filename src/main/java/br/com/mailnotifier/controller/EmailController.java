@@ -4,6 +4,7 @@ import br.com.mailnotifier.dto.EmailRequestDTO;
 import br.com.mailnotifier.dto.EmailResponseDTO;
 import br.com.mailnotifier.model.Email;
 import br.com.mailnotifier.service.EmailService;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class EmailController {
     }
 
     @PostMapping
-    public ResponseEntity<EmailResponseDTO> enviarEmail(@RequestBody EmailRequestDTO dto) {
+    public ResponseEntity<EmailResponseDTO> enviarEmail(@Valid @RequestBody EmailRequestDTO dto) {
 
         Email email = emailService.processarNotificacao(dto);
 
