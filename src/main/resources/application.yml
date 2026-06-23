@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: mailNotifierService
+  profiles:
+    active: dev
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:mailnotifierdb
+    driver-class-name: org.h2.Driver
+    username: user
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+brevo:
+  api-url: ${BREVO_API_URL:https://api.brevo.com/v3/smtp/email}
+  api-key: ${BREVO_API_KEY:}
+  sender-email: ${BREVO_SENDER_EMAIL:contato.victorhugos@gmail.com}
+  sender-name: ${BREVO_SENDER_NAME:Mail Notifier}
