@@ -29,4 +29,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
     }
 
+    @ExceptionHandler(EmailEncryptionException.class)
+    public ResponseEntity<ApiError> handleEmailEncryptionException(EmailEncryptionException ex) {
+        log.error("Erro na criptografia dos dados: {}", ex.getMessage(), ex);
+
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
 }

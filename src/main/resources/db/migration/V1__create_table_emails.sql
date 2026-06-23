@@ -1,8 +1,9 @@
 CREATE TABLE tb_emails (
     id UUID PRIMARY KEY,
-    destinatario VARCHAR(255) NOT NULL,
-    titulo VARCHAR(255) NOT NULL,
-    conteudo TEXT,
-    status_email VARCHAR(50) NOT NULL,
-    data_envio TIMESTAMP NOT NULL
+    recipient VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    content TEXT,
+    status VARCHAR(50) NOT NULL,
+    sent_at TIMESTAMP NOT NULL,
+    encrypted BOOLEAN DEFAULT FALSE
 );

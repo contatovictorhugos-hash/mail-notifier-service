@@ -1,13 +1,14 @@
 package br.com.mailnotifier.dto;
 
-import br.com.mailnotifier.model.StatusEmail;
+import br.com.mailnotifier.model.EmailStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record EmailResponseDTO(
-        UUID id,
-        String destinatario,
-        String titulo,
-        StatusEmail statusEmail,
-        LocalDateTime dataEnvio) {
+                UUID id,
+                String recipient,
+                String subject,
+                EmailStatus status,
+                LocalDateTime sentAt,
+                Boolean encrypted) {
 }

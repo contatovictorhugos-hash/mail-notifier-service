@@ -1,13 +1,6 @@
 package br.com.mailnotifier.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import br.com.mailnotifier.dto.EmailRequestDTO;
@@ -26,23 +19,25 @@ public class Email {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String destinatario;
-    private String titulo;
+    private String recipient;
+    private String subject;
 
     @Column(columnDefinition = "TEXT")
-    private String conteudo;
+    private String content;
 
     @Enumerated(EnumType.STRING)
-    private StatusEmail statusEmail;
+    private EmailStatus status;
 
-    private LocalDateTime dataEnvio;
+    private LocalDateTime sentAt;
 
-    public Email(EmailRequestDTO dto) {
-        this.destinatario = dto.destinatario();
-        this.titulo = dto.titulo();
-        this.conteudo = dto.conteudo();
-        this.statusEmail = StatusEmail.PENDENTE;
-        this.dataEnvio = LocalDateTime.now();
+    private Boolean encrypted = false;
+
+    public Email(String recipient, String subject, String content, Boolean encrypted) {
+        this.recipient = recipient;
+        this.subject = subject;
+        this.content = content;
+        this.status = EmailStatus.PENDING;
+        this.sentAt = LocalDateTime.now();
+        this.encrypted = encrypted;
     }
-
 }

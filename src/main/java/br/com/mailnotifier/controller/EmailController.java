@@ -27,8 +27,13 @@ public class EmailController {
 
         Email email = emailService.processarNotificacao(dto);
 
-        EmailResponseDTO response = new EmailResponseDTO(email.getId(), email.getDestinatario(), email.getTitulo(),
-                email.getStatusEmail(), email.getDataEnvio());
+        EmailResponseDTO response = new EmailResponseDTO(
+                email.getId(),
+                email.getRecipient(),
+                email.getSubject(),
+                email.getStatus(),
+                email.getSentAt(),
+                email.getEncrypted());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
