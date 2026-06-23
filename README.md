@@ -72,7 +72,7 @@ Send a POST request to deliver an email.
 ```
 
 #### Success Response
-- **Status**: `200 OK`
+- **Status**: `201 Created`
 - **Response Body**:
 ```json
 {
