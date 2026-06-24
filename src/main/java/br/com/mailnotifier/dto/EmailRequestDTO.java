@@ -14,5 +14,5 @@ public record EmailRequestDTO(
                 @NotBlank(message = "Content is required")
                 String content,
 
-                String publicKey) {
+                Boolean encrypted) {
 }

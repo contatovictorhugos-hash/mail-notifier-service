@@ -22,3 +22,6 @@ brevo:
   api-key: ${BREVO_API_KEY}
   sender-email: ${BREVO_SENDER_EMAIL}
   sender-name: ${BREVO_SENDER_NAME}
+
+key-management:
+  url: ${KEY_MANAGEMENT_URL:http://localhost:8081/keys}

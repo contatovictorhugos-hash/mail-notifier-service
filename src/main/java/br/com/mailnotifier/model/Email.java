@@ -3,7 +3,6 @@ package br.com.mailnotifier.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import br.com.mailnotifier.dto.EmailRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +30,9 @@ public class Email {
     private LocalDateTime sentAt;
 
     private Boolean encrypted = false;
+
+    @Column(name = "key_id")
+    private UUID keyId;
 
     public Email(String recipient, String subject, String content, Boolean encrypted) {
         this.recipient = recipient;

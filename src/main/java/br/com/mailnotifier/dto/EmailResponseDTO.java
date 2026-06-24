@@ -10,5 +10,6 @@ public record EmailResponseDTO(
                 String subject,
                 EmailStatus status,
                 LocalDateTime sentAt,
-                Boolean encrypted) {
+                Boolean encrypted,
+                UUID keyId) {
 }

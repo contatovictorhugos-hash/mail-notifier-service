@@ -34,7 +34,8 @@ public class EmailController {
                 email.getSubject(),
                 email.getStatus(),
                 email.getSentAt(),
-                email.getEncrypted());
+                email.getEncrypted(),
+                email.getKeyId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 

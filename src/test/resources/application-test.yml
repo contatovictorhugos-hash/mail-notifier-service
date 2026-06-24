@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+
+brevo:
+  api-url: https://api.brevo.com/v3/smtp/email
+  api-key: test-api-key
+  sender-email: test@test.com
+  sender-name: Test Sender
+
+key-management:
+  url: http://localhost:8081/keys
